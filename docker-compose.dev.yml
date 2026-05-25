@@ -1,0 +1,40 @@
+# docker-compose.dev.yml
+# Starts ONLY the infrastructure services (Postgres + Redis).
+# Run your backend and frontend locally for hot-reload dev experience.
+#
+# Usage:
+#   docker compose -f docker-compose.dev.yml up -d
+#   cd backend && uvicorn main:app --reload
+#   cd frontend && npm run dev
+
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cashcrew
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d cashcrew"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    restart: unless-stopped
+
+volumes:
+  postgres_dev_data:
+  redis_dev_data:

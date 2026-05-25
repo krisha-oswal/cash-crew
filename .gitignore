@@ -1,0 +1,12 @@
+.env
+backend/.env
+backend/.env.local
+backend/.env.production
+frontend/.env.local
+frontend/.env.production
+venv/
+backend/venv/
+node_modules/
+frontend/node_modules/
+__pycache__/
+*.log
